@@ -1,0 +1,34 @@
+body{
+    background-color: rgb(190, 211, 229);
+    text-align: center;
+    
+}
+
+
+table{
+    text-align: center;
+    height: 300px;
+    width: 300px;
+    margin-left: 40%;
+    margin-top: 10%;
+}
+
+td{
+    background-color: rgb(228, 225, 225);
+    border: black solid 1px;
+}
+/* td:hover{
+    background-color: rgb(172, 150, 150);
+
+} */
+
+button{
+    background-color: rgb(202, 186, 186);
+    height: 70px;
+    width: 70px;
+    
+}
+button:hover{
+    background-color: rgb(172, 150, 150);
+
+}
