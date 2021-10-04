@@ -12,6 +12,11 @@ var gGame = {
     markedCount: 0,
     secsPassed: 0
 }
+
+
+
+
+var gBomb = []
 // This is called when page loads
 
 function init() {
@@ -26,11 +31,16 @@ function buildBoard() {
     for (var i = 0; i < gLevel.SIZE; i++) {
         board.push([]);
         for (var j = 0; j < gLevel.SIZE; j++) {
+
             board[i][j] = {
                 minesAroundCount: 0,
-                isShown: true,
+                isShown: false,
                 isMine: false,
                 isMarked: false
+            }
+            if (i === 0 && j === 0 ||
+                i === 1 && j === 3) {/// bomb
+                board[i][j].isMine = true
             }
         }
     }
@@ -38,9 +48,34 @@ function buildBoard() {
     return board
 }
 // Count mines around each cell and set the cell's minesAroundCount.
-function setMinesNegsCount(board) {
+function setMinesNegsCount(elCell) { /// start with board
+    var minesCount = 0;
+    for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
 
+            if (elCell);
+
+
+            //         if(i === 0){
+            //             if (gBoard[i][j - 1].isMine) minesCount++; /// Top left
+            //         }
+            //         if (gBoard[i - 1][j - 1].isMine) minesCount++;
+
+        }
+    }
+    // console.log('minesCount',minesCount);
+    // return minesCount;
+    console.log(elCell);
 }
+
+
+// console.log('nextLocation', nextLocation);
+// var nextCell = gBoard[nextLocation.i][nextLocation.j];
+// if (nextCell === WALL) return
+// console.log('nextCell', nextCell);
+
+// return if cannot move
+
 // Render the board as a <table> to the page
 function renderBoard(board, selector) {
 
@@ -51,8 +86,15 @@ function renderBoard(board, selector) {
         for (var j = 0; j < board.length; j++) {
             // var cell = board[i][j];
             // var className = `cell cell${i}-${j}`;
-            strHTML += `<td class="cell cell${i}-${j}"><button onclick="cellClicked(this, ${i}, ${j})"  ></button></td>`
-          
+            strHTML += `<td class="cell cell${i}-${j}"  onclick="cellClicked(this, ${i}, ${j})">`
+
+            if (gBoard[i][j].isMine) {
+                strHTML += `<span class="bomb">🧨</span></td>`
+
+            }
+
+            strHTML += `<span class="bomb"></span></td>`
+
 
         }
 
@@ -64,12 +106,17 @@ function renderBoard(board, selector) {
 }
 // Called when a cell (td) is clicked
 function cellClicked(elCell, i, j) {
-    console.log(elCell);
+    /// update model
+    gBoard[i][j].isShown = true;
+    // elCell.querySelector('.bomb').style.display = 'block'
+    // console.log(elCell.querySelector('.bomb'));
+
+    //count neighbor
+    setMinesNegsCount(elCell)
+    // elCell.remove()
     console.log('i', i);
     console.log('j', j);
 
-   var res = elCell.addEventListener('mouseup', MouseClick);
-   console.log(res);
 }
 // Called on right click to mark a cell (suspected to be a mine) Search the web (and implement) how to hide the context menu on right click
 function cellMarked(elCell) {
@@ -86,21 +133,8 @@ function expandShown(board, elCell, i, j) {
 }
 
 
-function MouseClick(e) {
-    if (typeof e === 'object') {
-        switch (e.button) {
-            case 0:
-                console.log('Left button clicked.');
-                return 0
-                break;
-            case 1:
-                console.log('Middle button clicked.');
-                break;
-            case 2:
-                console.log('Right button clicked.');
-                break;
-            default:
-                console.log(`Unknown button code: ${e.button}`);
-        }
-    }
+function createMine() {
+
 }
+
+

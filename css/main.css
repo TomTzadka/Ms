@@ -16,11 +16,13 @@ table{
 td{
     background-color: rgb(228, 225, 225);
     border: black solid 1px;
+    height: 70px;
+    width: 70px;
 }
-/* td:hover{
+td:hover{
     background-color: rgb(172, 150, 150);
 
-} */
+}
 
 button{
     background-color: rgb(202, 186, 186);
@@ -30,5 +32,15 @@ button{
 }
 button:hover{
     background-color: rgb(172, 150, 150);
-
+    
+}
+.bomb{
+    display: none;
+    background-color: rgb(216, 180, 180);
+    height: 70px;  
+}
+.empty{
+    display: none;
+    background-color: rgb(216, 180, 180);
+    height: 70px;  
 }
