@@ -34,13 +34,7 @@ button:hover{
     background-color: rgb(172, 150, 150);
     
 }
-.bomb{
-    display: none;
-    background-color: rgb(216, 180, 180);
-    height: 70px;  
-}
-.empty{
-    display: none;
-    background-color: rgb(216, 180, 180);
-    height: 70px;  
+.timer{
+    font-size: 50px;
+    margin-top: 10px;
 }
