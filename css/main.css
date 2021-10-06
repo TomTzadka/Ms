@@ -53,4 +53,9 @@ button:hover{
     font-size: 25px;
     
 }
-/* color: rgb(245, 119, 119); */
+#modal{
+    color: rgb(228, 159, 30);
+    font-size: 40px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    display: none;
+}

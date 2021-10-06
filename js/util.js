@@ -17,20 +17,21 @@ return Math.floor(Math.random() * (max - min + 1) + min);
 
 
 
-function setTime() {
-    var secondsLabel = document.getElementById("seconds");
-    var miliSecondsLabel = document.getElementById("miliSeconds");
-    ++gTotalMiliSeconds;
-    miliSecondsLabel.innerText = pad(gTotalMiliSeconds % 60);
-    secondsLabel.innerHTML = pad(parseInt(gTotalMiliSeconds / 100));
+var gInterval;
+const SECOND = 1000;
 
+function startTimer() {
+    var elTimer = document.querySelector('.timer');
+    var timestamp = Date.now();
+
+    gInterval = setInterval(() => {
+        var time = `${((Date.now() - timestamp) / 1000).toFixed(2)}`;
+        elTimer.innerText = time;
+    }, 100);
 }
 
-function pad(val) {
-    var valString = val + "";
-    if (valString.length < 2) {
-        return "0" + valString;
-    } else {
-        return valString;
-    }
+function firstClick(elCell){
+    var cellCoords= getCallCoords(elCell.id)
+    gFirstClick = cellCoords
 }
+

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,27 +8,31 @@
     <title>Minesweeper</title>
     <link rel="stylesheet" href="css/main.css">
 </head>
-<body onload="init()" >
+
+<body onload="init()">
 
     <div class="timer">
-        <label id="seconds">00</label>:<label id="miliSeconds">00</label>
+        <label id="seconds">0</label>.<label id="miliSeconds">00</label>
     </div>
     <h2>Start by pressing one of the cells</h2>
-   <div>
-       <h2>Number of flag: <span id="number-of-flag"></span></h2>
-       <button onclick="level(this)">4</button>
-       <button onclick="level(this)">8</button>
-       <button onclick="level(this)">12</button>
-       
-    </div> 
+    <div>
+        <h2>Flags left: <span id="number-of-flag"></span></h2>
+        <button onclick="level(this)">4</button>
+        <button onclick="level(this)">8</button>
+        <button onclick="level(this)">12</button>
+
+    </div>
     <button id="new-game" onclick="newGame()">😁</button>
     <div class="board-container"></div>
 
+    <div>
+        <h1 id="modal">Victory!</h1>
+    </div>
 
-    
 
-    
+
     <script src="js/util.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>

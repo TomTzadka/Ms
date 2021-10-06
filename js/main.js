@@ -1,10 +1,6 @@
 'use strict'
 
 var gBoard
-// minesAroundCount: 4,
-// isShown: true, isMine: false,
-// isMarked: true
-
 var gLevel = { SIZE: 4, MINES: 2 };
 var gGame = {
     isOn: false,
@@ -16,20 +12,15 @@ var gGame = {
 const MINE = '🧨';
 const FLAG = '🏴‍☠️';
 var currNumOfFlag = gLevel.MINES;
-var gNumOfMarkd = 0;
-
-var gIsTimerWork
-var gTotalMiliSeconds = 0.00;
-var gTimeStart;
+var isVictory;
+// var gFirstClick = true;
+// var gFirstClickIdx;
 
 // This is called when page loads
-
 function init() {
-
     gBoard = buildBoard();
     renderBoard(gBoard, '.board-container')
     createMines(gBoard)
-
 }
 // Builds the board Set mines at random locations Call setMinesNegsCount() Return the created board
 function buildBoard() {
@@ -68,8 +59,6 @@ function setMinesNegsCount(elCell) { /// start with board
     return minesCount;
 }
 
-
-
 // Render the board as a <table> to the page
 function renderBoard(board, selector) {
     document.querySelector('#number-of-flag').innerText = gLevel.MINES /// update flag
@@ -96,25 +85,18 @@ function renderBoard(board, selector) {
 }
 // Called when a cell (td) is clicked
 function cellClicked(elCell) {
-    console.log('currNumOfFlag', currNumOfFlag);
-    if (!gIsTimerWork) {
-        gTimeStart = setInterval(setTime, 10);
-    }
-    gIsTimerWork = true;
-    cellMarked(elCell)
+    if (gGame.isOn) cellMarked(elCell);
 
 }
 // Called on right click to mark a cell (suspected to be a mine) Search the web (and implement) how to hide the context menu on right click
 function cellMarked(elCell) {
-    
-    gGame.shownCount++
-
     var cellIdx = getCallCoords(elCell.id);
     var i = cellIdx.i
     var j = cellIdx.j
 
     if (!gBoard[i][j].isShown && !gBoard[i][j].isMarked) {
         /// update model
+        gGame.shownCount++
         gBoard[i][j].isShown = true;
         var numOfMines = setMinesNegsCount(elCell)
         gBoard[i][j].minesAroundCount = numOfMines
@@ -126,19 +108,17 @@ function cellMarked(elCell) {
             gameOver()
         } else if (!gBoard[i][j].minesAroundCount) {
             expandShown(elCell, i, j)
-
         } else {
             elCell.innerText = numOfMines;
         }
     }
-    if (gGame.shownCount === (gLevel.SIZE ** 2) - gLevel.MINES &&
-        gGame.markedCount === gLevel.MINES) victory();
-
-    console.log('gGame.shownCount', gGame.shownCount);
-    console.log('gGame.markedCount', gGame.markedCount);
+    if (gGame.shownCount === (gLevel.SIZE ** 2) - gGame.markedCount &&
+        gLevel.MINES === 0) victory();
+    gGame.isOn = true
 }
 
 function putFlag(elCell) {
+    gGame.isOn = true
     var cellIdx = getCallCoords(elCell.id);
     var i = cellIdx.i;
     var j = cellIdx.j;
@@ -146,34 +126,33 @@ function putFlag(elCell) {
         if (gBoard[i][j].isMarked) {
             // update model
             gBoard[i][j].isMarked = false;
-            currNumOfFlag++;
-            gGame.markedCount--; 
+            gLevel.MINES++;
+            gGame.markedCount--;
             //update dom
             elCell.innerText = '';
-            document.querySelector('#number-of-flag').innerText = currNumOfFlag;
+            document.querySelector('#number-of-flag').innerText = gLevel.MINES;
         } else {
             // update model
             gBoard[i][j].isMarked = true;
-            currNumOfFlag--;
-            gGame.markedCount++; 
+            gLevel.MINES--;
+            gGame.markedCount++;
             //update dom
             elCell.innerText = FLAG;
-            document.querySelector('#number-of-flag').innerText = currNumOfFlag;
+            document.querySelector('#number-of-flag').innerText = gLevel.MINES;
 
         }
     }
     if (gGame.shownCount === (gLevel.SIZE ** 2) - gLevel.MINES &&
         gGame.markedCount === gLevel.MINES) victory();
-    console.log('gGame.shownCount', gGame.shownCount);
-    console.log('gGame.markedCount', gGame.markedCount);
+
 }
 // Game ends when all mines are marked, and all the other cells are shown
 function gameOver() {
-    /// update model of game
-    gGame.isOn = false 
-    ///update dom
+    gGame.isOn = false
+    clearInterval(gInterval);
     var elFace = document.getElementById('new-game')
     elFace.innerText = '😖'
+    new Audio('sound/lose.mp4').play();
 
     for (var i = 0; i < gLevel.SIZE; i++) {
         for (var j = 0; j < gLevel.SIZE; j++) {
@@ -182,30 +161,36 @@ function gameOver() {
                 // update model of cell
                 gBoard[i][j].isShown = true;
                 /// update dom of cell
-                // var elCell= document.querySelector(`#${i}-${j}`)
                 var elCell = document.getElementById(`${i}-${j}`)
-
-                console.log('elCell', elCell);
                 elCell.innerText = MINE;
                 elCell.style.backgroundColor = 'rgb(245, 119, 119)';
-                console.log('mine', gBoard[i][j]);
             }
         }
     }
+    showModal()
 }
 
 function victory() {
-    console.log('victory');
+    var elFace = document.getElementById('new-game')
+    elFace.innerText = '😎'
+    isVictory = true
+    clearInterval(gInterval);
+    gGame.isOn = false
+    new Audio('sound/victory.mp4').play();
+    showModal()
 }
 // When user clicks a cell with no mines around, we need to open not only that cell,
 // but also its neighbors. NOTE: start with a basic implementation that only opens the non-mine 1st degree neighbors
 
 function whichButton(event, elCell) {
-    gGame.isOn = true
+    // if(gFirstClick){
+    //     firstClick(elCell)
+    //     gFirstClick = false
+    // }
+    if(!gGame.isOn) startTimer();
     var mouseButton = event.which;
     if (mouseButton === 1) cellMarked(elCell);/// Right click
     if (mouseButton === 3) putFlag(elCell);/// Left click
-
 }
 function expandShown(elCell) {
     var cellIdx = getCallCoords(elCell.id);
@@ -222,7 +207,6 @@ function expandShown(elCell) {
             if (gBoard[a][b].isMine) continue; // check mine
             var nextCell = document.querySelector(`.cell${a}-${b}`)
             cellMarked(nextCell)
-
         }
     }
 }
@@ -235,25 +219,30 @@ function level(elBtn) {
         gLevel = { SIZE: 12, MINES: 30 };
     } else if (elSizeClicked === 8) {
         gLevel = { SIZE: 8, MINES: 12 }
-
     } else gLevel = { SIZE: 4, MINES: 2 } /// for default
     //update dom
-    document.querySelector('#number-of-flag').innerText = currNumOfFlag
+    document.querySelector('#number-of-flag').innerText = gLevel.MINES
     newGame()
 }
 
 function newGame() {
-    // var gLevel = { SIZE: 4, MINES: 2 };
-    // update dom
+    // update model
+    clearInterval(gInterval);
     gGame = {
         isOn: false,
         shownCount: 0,
         markedCount: 0,
         secsPassed: 0
     }
-    //update model
+    isVictory = false;
+    // gFirstClick = true;
+
+    //update dom
     var elFace = document.getElementById('new-game')
     elFace.innerText = '😁'
+    var elTimerDiv = document.querySelector('.timer');
+    elTimerDiv.innerHTML = '0.00';
+    removeModal()
     init()
 }
 
@@ -263,21 +252,45 @@ function createMines(board) {
     for (var i = 0; i < gLevel.MINES; i++) {
         var currMine = mines[i]
         currMine = createMine(board)
+
+        for (var j = 0; j < mines.length; j++) { /// fixing double booking of mines  
+            while (currMine === mines[j]) {
+                currMine = createMine(board);
+            
+            }
+        }
         mines.push(currMine)
     }
     gLevel.MINES = mines.length
-    console.log('gLevel.MINES',gLevel.MINES);
     return mines
 }
 
-function createMine(board) {
+function createMine(board, idx) {
     var mine = {
         i: getRandomInt(0, board.length - 1),
         j: getRandomInt(0, board.length - 1)
     };
-    gBoard[mine.i][mine.j].isMine = true
+    // console.log('ifc', gFirstClickIdx);
+    // if(mine.i === gFirstClickIdx.i && mine.j === gFirstClickIdx.j) createMine(board, idx); /// first click  
+
+    if (!gBoard[mine.i][mine.j].isMine) gBoard[mine.i][mine.j].isMine = true;
+    
+
 
     return mine;
 }
 
-// console.log('createMines()',createMines());
+function showModal(){
+    var elModal = document.getElementById('modal');
+    elModal.style.display = 'block'
+    if(isVictory){
+        elModal.innerText = 'You Win!'
+    }else{
+       elModal.innerText = 'You Lose!'
+
+   } 
+}
+function removeModal(){
+    var elModal = document.getElementById('modal');
+    elModal.style.display = 'none'
+}
