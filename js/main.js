@@ -15,8 +15,8 @@ var gGame = {
 
 const MINE = '🧨';
 const FLAG = '🏴‍☠️';
-var currNumOfFlag = 2;
-var numOfMarkd = 0;
+var currNumOfFlag = gLevel.MINES;
+var gNumOfMarkd = 0;
 
 var gIsTimerWork
 var gTotalMiliSeconds = 0.00;
@@ -77,6 +77,7 @@ function setMinesNegsCount(elCell) { /// start with board
 
 // Render the board as a <table> to the page
 function renderBoard(board, selector) {
+    document.querySelector('#number-of-flag').innerText = gLevel.MINES /// update flag
 
     var strHTML = '<table border="1"><tbody>';
 
@@ -100,6 +101,7 @@ function renderBoard(board, selector) {
 }
 // Called when a cell (td) is clicked
 function cellClicked(elCell) {
+   console.log('currNumOfFlag',currNumOfFlag);
     if (!gIsTimerWork) {
         gTimeStart = setInterval(setTime, 10);
     }
@@ -109,7 +111,7 @@ function cellClicked(elCell) {
 }
 // Called on right click to mark a cell (suspected to be a mine) Search the web (and implement) how to hide the context menu on right click
 function cellMarked(elCell) {
-    numOfMarkd++
+    gNumOfMarkd++
     var cellIdx = getCallCoords(elCell.id);
     var i = cellIdx.i
     var j = cellIdx.j
@@ -126,49 +128,52 @@ function cellMarked(elCell) {
             elCell.innerText = MINE
             gameOver()
         } else if (!gBoard[i][j].minesAroundCount) {
-            expandShown(elCell,i, j)
+            expandShown(elCell, i, j)
+
         } else {
             elCell.innerText = numOfMines;
         }
     }
-    if(numOfMarkd === 16){
-        victory()
-    }
-    
+    if (gNumOfMarkd === 16 && !currNumOfFlag) victory();
+
+
+    console.log(gNumOfMarkd);
 }
 
 function putFlag(elCell) {
-    numOfMarkd++;
+
     var cellIdx = getCallCoords(elCell.id);
     var i = cellIdx.i;
     var j = cellIdx.j;
-    if(!gBoard[i][j].isShown){
+    if (!gBoard[i][j].isShown) {
         if (gBoard[i][j].isMarked) {
             // update model
             gBoard[i][j].isMarked = false;
             currNumOfFlag++;
+            gNumOfMarkd--;
             //update dom
             elCell.innerText = '';
             document.querySelector('#number-of-flag').innerText = currNumOfFlag;
         } else {
             // update model
             gBoard[i][j].isMarked = true;
-            
             currNumOfFlag--;
+            gNumOfMarkd++;
             //update dom
             elCell.innerText = FLAG;
             document.querySelector('#number-of-flag').innerText = currNumOfFlag;
 
-        }   
+        }
     }
+    console.log(gNumOfMarkd);
 }
 // Game ends when all mines are marked, and all the other cells are shown
 function gameOver() {
-    alert('Game Over')
+    console.log('Game Over')
 }
 
-function victory(){
-    alert('Victory')
+function victory() {
+    console.log('victory');
 }
 // When user clicks a cell with no mines around, we need to open not only that cell,
 // but also its neighbors. NOTE: start with a basic implementation that only opens the non-mine 1st degree neighbors
@@ -177,7 +182,7 @@ function whichButton(event, elCell) {
     var mouseButton = event.which;
     if (mouseButton === 1) cellMarked(elCell);/// Right click
     if (mouseButton === 3) putFlag(elCell);/// Left click
-    
+
 }
 function expandShown(elCell) {
     var cellIdx = getCallCoords(elCell.id);
@@ -185,23 +190,43 @@ function expandShown(elCell) {
     var j = cellIdx.j;
 
     var diff = 1;
-    for(var a = i - diff ; a <= i + 1 ; a++){
+    for (var a = i - diff; a <= i + 1; a++) {
         if (a < 0 || a >= gBoard.length) continue; /// check border
-        for(var b = j - diff ; b <= j + 1; b++){
+        for (var b = j - diff; b <= j + 1; b++) {
             if (b < 0 || b >= gBoard.length) continue; /// check border
-            if(a === i && b=== j ) continue; /// check me
-            if(gBoard[a][b].isShown) continue/// chech show
-            if(gBoard[a][b].isMine)continue; // check mine
-            var nextCell= document.querySelector(`.cell${a}-${b}`)
+            if (a === i && b === j) continue; /// check me
+            if (gBoard[a][b].isShown) continue/// chech show
+            if (gBoard[a][b].isMine) continue; // check mine
+            var nextCell = document.querySelector(`.cell${a}-${b}`)
             cellMarked(nextCell)
-                
+
         }
     }
 }
 
+// var gLevel = { SIZE: 4, MINES: 2 };
+function level(elBtn) {
+    var elSizeClicked = +elBtn.innerText
+    console.log(elSizeClicked);
+    /// update model
+    gLevel.SIZE = elSizeClicked
 
 
+    if (elSizeClicked === 4) {
+        gLevel.MINES = 2
+    } else if (elSizeClicked === 8) {
+        gLevel.MINES = 12
+    } else gLevel.MINES = 30 /// for 12*12
+    //update dom
+    document.querySelector('#number-of-flag').innerText = currNumOfFlag
+    
+    
+    newGame()
+}
 
+function newGame(){
+    init()
+}
 
 
 

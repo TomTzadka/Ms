@@ -1,23 +1,28 @@
+
+*{
+    text-align: center;
+}
 body{
     background-color: rgb(190, 211, 229);
-    text-align: center;
+    
     
 }
 
 
 table{
     text-align: center;
-    height: 300px;
-    width: 300px;
-    margin-left: 40%;
-    margin-top: 10%;
+    height: 200px;
+    margin: auto;
+    margin-top: 10px;
 }
 
 td{
     background-color: rgb(228, 225, 225);
     border: black solid 1px;
-    height: 70px;
-    width: 70px;
+    height: 40px;
+    width: 40px;
+    cursor: pointer
+
 }
 td:hover{
     background-color: rgb(172, 150, 150);
@@ -27,7 +32,8 @@ td:hover{
 button{
     background-color: rgb(202, 186, 186);
     height: 70px;
-    width: 70px;
+    width: 90px;
+    cursor: pointer
     
 }
 button:hover{
@@ -37,4 +43,14 @@ button:hover{
 .timer{
     font-size: 50px;
     margin-top: 10px;
+}
+#new-game{
+    background-color: rgb(252, 181, 181);
+    font-size: 25px;
+}
+#new-game:hover{
+    background-color: rgb(252, 156, 156);
+    font-size: 25px;
+    
+
 }
