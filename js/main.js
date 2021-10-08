@@ -19,7 +19,7 @@ var gFirstClick = true;
 function init() {
     gBoard = buildBoard();
     renderBoard(gBoard, '.board-container')
-    
+
 }
 // Builds the board Set mines at random locations Call setMinesNegsCount() Return the created board
 function buildBoard() {
@@ -75,7 +75,7 @@ function createMines(board, firstClickIdx) {
 }
 
 function createMine(board, firstClickIdx) {
-    console.log('firstClickIdx', firstClickIdx);
+
     var mine = {}
 
     var mineI = getRandomInt(0, board.length - 1)
@@ -88,7 +88,7 @@ function createMine(board, firstClickIdx) {
     mine.i = mineI
     mine.j = mineJ
 
-    console.log('mine', mine);
+
 
     if (!gBoard[mine.i][mine.j].isMine) gBoard[mine.i][mine.j].isMine = true;
 
@@ -131,34 +131,50 @@ function cellMarked(elCell) {
     var j = cellIdx.j
 
     if (!gBoard[i][j].isShown && !gBoard[i][j].isMarked) {
-        /// update model
-        gGame.shownCount++
-        gBoard[i][j].isShown = true;
-        var numOfMines = setMinesNegsCount(elCell)
-        gBoard[i][j].minesAroundCount = numOfMines
 
-        ///update dom
-        elCell.style.backgroundColor = 'rgb(204, 231, 225)'
-        if (gBoard[i][j].isMine) {
+        if (gLives > 1) {
+            /// update model
+            gGame.shownCount++
+            gBoard[i][j].isShown = true;
+            var numOfMines = setMinesNegsCount(elCell)
+            gBoard[i][j].minesAroundCount = numOfMines
+
+            ///update dom
+            elCell.style.backgroundColor = 'rgb(204, 231, 225)'
+            if (gBoard[i][j].isMine) {
+                elCell.innerText = MINE
+                // gameOver()
+                document.querySelector(`.heart${gLives}`).style.display = 'none'
+                // console.log('elHeart',elHeart);
+                gLives--;
+                alert('BOOOOM You got on a mine')
+
+            } else if (!gBoard[i][j].minesAroundCount) {
+                expandShown(elCell, i, j)
+            } else {
+                if (numOfMines === 1) {
+                    elCell.style.color = 'rgb(49, 69, 255)' //blue
+                } else if (numOfMines === 2) {
+                    elCell.style.color = 'rgb(108, 173, 54)' //green
+                } else if (numOfMines === 3) {
+                    elCell.style.color = 'rgb(173, 54, 54)' //red
+                } else if (numOfMines === 4) {
+                    elCell.style.color = 'rgb(20, 23, 70)' //dark blue
+                } else {
+                    elCell.style.color = 'rgb(134, 124, 34)'
+                }
+                elCell.innerText = numOfMines;
+                elCell.style.fontWeight = 'bold'
+                elCell.style.fontSize = '120%'
+
+            }
+
+        } else {
             elCell.innerText = MINE
             gameOver()
-        } else if (!gBoard[i][j].minesAroundCount) {
-            expandShown(elCell, i, j)
-        } else {
-            if (numOfMines === 1) {
-                elCell.style.color = 'rgb(49, 69, 255)' //blue
-            } else if (numOfMines === 2) {
-                elCell.style.color = 'rgb(108, 173, 54)' //green
-            } else if (numOfMines === 3) {
-                elCell.style.color = 'rgb(173, 54, 54)' //red
-            } else if (numOfMines === 4) {
-                elCell.style.color = 'rgb(20, 23, 70)' //dark blue
-            } else {
-                elCell.style.color = 'rgb(134, 124, 34)'
-            }
-            elCell.innerText = numOfMines;
-            elCell.style.fontWeight = 'bold'
         }
+
+
     }
     gGame.isOn = true
     checkVictory();
@@ -197,10 +213,10 @@ function putFlag(elCell) {
 // but also its neighbors. NOTE: start with a basic implementation that only opens the non-mine 1st degree neighbors
 
 function whichButton(event, elCell) {
-    console.log('gFirstClick', gFirstClick);
+    if (gIsModalOn) return;
     if (!gGame.isOn) startTimer();
-    var mouseButton = event.which;
 
+    var mouseButton = event.which;
     if (mouseButton === 1) {
         if (gFirstClick) firstClick(elCell)
         cellMarked(elCell);/// Left click
@@ -250,16 +266,18 @@ function newGame() {
     } else {
         gLevel.MINES = 30;
     }
-
+    gFirstClick = true
     isVictory = false;
-
+    gLives = 3;
 
     //update dom
     var elFace = document.getElementById('new-game')
     elFace.innerText = '😁'
     var elTimerDiv = document.querySelector('.timer');
     elTimerDiv.innerHTML = '0.00';
-    gFirstClick = true
+    for (var i = 0; i < 3; i++) {
+        document.querySelector(`.heart${i + 1}`).style.display = 'inline-block'
+    }
     removeModal()
     init()
 }

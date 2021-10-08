@@ -1,5 +1,7 @@
 'use srtict'
 // Game ends when all mines are marked, and all the other cells are shown
+var gIsModalOn;
+var gLives = 3;
 function gameOver() {
     gGame.isOn = false
     clearInterval(gInterval);
@@ -37,6 +39,7 @@ function checkVictory(){
 }
 
 function showModal() {
+    gIsModalOn = true;
     var elModal = document.getElementById('modal');
     elModal.style.display = 'block'
     if (isVictory) {
@@ -49,4 +52,5 @@ function showModal() {
 function removeModal() {
     var elModal = document.getElementById('modal');
     elModal.style.display = 'none'
+    gIsModalOn = false;
 }

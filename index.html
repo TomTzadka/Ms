@@ -11,22 +11,29 @@
 
 <body onload="init()">
 
-    <div class="header" >
+    <div class="header">
         <span class="timer"><label id="seconds">0</label>.<label id="miliSeconds">00</label></span>
-        <h2>Start by pressing one of the cells</h2>
+        <div class="lives">
+            <span class="heart1">❤</span>
+            <span class="heart2">❤</span>
+            <spa class="heart3">❤</span>
+        </div>
+        <button id="new-game" onclick="newGame()">😁</button>
+        <!-- <h2>Start by pressing one of the cells</h2> -->
     </div>
-    <div class="side" >
-        <h2>Flags left: <span id="number-of-flag"></span></h2>
+
+    <div class="levels">
         <button onclick="level(this)">4</button>
         <button onclick="level(this)">8</button>
         <button onclick="level(this)">12</button>
     </div>
-    <div class="main">
-         <button id="new-game" onclick="newGame()">😁</button>
+    <h2>Flags left: <span id="number-of-flag"></span></h2>
+
+        
     <div>
         <h1 id="modal">Victory!</h1>
     </div>
-    <div class="board-container"></div>   
+    <div class="board-container"></div>
     </div>
 
 
