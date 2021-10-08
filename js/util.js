@@ -34,7 +34,7 @@ function firstClick(elCell){
     var cellCoords= getCallCoords(elCell.id)
     createMines(gBoard, cellCoords)
     gFirstClick = false
+    
+    
+   
 }
-
-
-

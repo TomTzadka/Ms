@@ -6,8 +6,7 @@ var gGame = {
     isOn: false,
     shownCount: 0,
     markedCount: 0,
-    secsPassed: 0,
-    lives: 3
+    secsPassed: 0
 }
 
 const MINE = '🧨';
@@ -16,12 +15,11 @@ var currNumOfFlag = gLevel.MINES;
 var isVictory;
 var gFirstClick = true;
 
-
 // This is called when page loads
 function init() {
     gBoard = buildBoard();
     renderBoard(gBoard, '.board-container')
-
+    
 }
 // Builds the board Set mines at random locations Call setMinesNegsCount() Return the created board
 function buildBoard() {
@@ -43,12 +41,12 @@ function buildBoard() {
 function renderBoard(board, selector) {
     document.querySelector('#number-of-flag').innerText = gLevel.MINES /// update flag
 
-    var strHTML = '<table class="game-table" border="1"><tbody>';
+    var strHTML = '<table border="1"><tbody>';
 
     for (var i = 0; i < board.length; i++) {
         strHTML += '<tr>';
         for (var j = 0; j < board.length; j++) {
-            strHTML += `<td class="game-td" id="${i}-${j}" class="cell cell${i}-${j}"  onmousedown="whichButton(event, this)" 
+            strHTML += `<td id="${i}-${j}" class="cell cell${i}-${j}"  onmousedown="whichButton(event, this)" 
             oncontextmenu="event.preventDefault();">`
         }
         strHTML += '</tr>';
@@ -125,7 +123,6 @@ function setMinesNegsCount(elCell) { /// start with board
 // Called when a cell (td) is clicked
 function cellClicked(elCell) {
     if (gGame.isOn) cellMarked(elCell);
-
 }
 // Called on right click to mark a cell (suspected to be a mine) Search the web (and implement) how to hide the context menu on right click
 function cellMarked(elCell) {
@@ -163,12 +160,11 @@ function cellMarked(elCell) {
             elCell.style.fontWeight = 'bold'
         }
     }
-    checkVictory();
     gGame.isOn = true
+    checkVictory();
 }
 
 function putFlag(elCell) {
-    checkVictory();
     gGame.isOn = true
     var cellIdx = getCallCoords(elCell.id);
     var i = cellIdx.i;
@@ -190,9 +186,11 @@ function putFlag(elCell) {
             //update dom
             elCell.innerText = FLAG;
             document.querySelector('#number-of-flag').innerText = gLevel.MINES;
+
         }
     }
     checkVictory();
+
 }
 
 // When user clicks a cell with no mines around, we need to open not only that cell,
@@ -208,7 +206,6 @@ function whichButton(event, elCell) {
         cellMarked(elCell);/// Left click
     } else if (mouseButton === 3) putFlag(elCell);/// Right click
 }
-
 function expandShown(elCell) {
     var cellIdx = getCallCoords(elCell.id);
     var i = cellIdx.i;
@@ -228,7 +225,6 @@ function expandShown(elCell) {
     }
 }
 
-// var gLevel = { SIZE: 4, MINES: 2 };
 function level(elBtn) {
     /// update model
     var elSizeClicked = +elBtn.innerText

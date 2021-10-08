@@ -31,7 +31,6 @@ function victory() {
     new Audio('sound/victory.mp4').play();
     showModal()
 }
-
 function checkVictory(){
     if (gGame.shownCount === (gLevel.SIZE ** 2) - gGame.markedCount &&
         gLevel.MINES === 0) victory();
