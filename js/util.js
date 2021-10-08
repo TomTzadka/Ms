@@ -1,4 +1,6 @@
 'use strict'
+var gInterval;
+const SECOND = 1000;
 
 
 function getCallCoords(id) {
@@ -17,8 +19,6 @@ return Math.floor(Math.random() * (max - min + 1) + min);
 
 
 
-var gInterval;
-const SECOND = 1000;
 
 function startTimer() {
     var elTimer = document.querySelector('.timer');
@@ -32,6 +32,9 @@ function startTimer() {
 
 function firstClick(elCell){
     var cellCoords= getCallCoords(elCell.id)
-    gFirstClick = cellCoords
+    createMines(gBoard, cellCoords)
+    gFirstClick = false
 }
+
+
 

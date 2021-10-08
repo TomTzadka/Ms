@@ -11,28 +11,71 @@
 
 <body onload="init()">
 
-    <div class="timer">
-        <label id="seconds">0</label>.<label id="miliSeconds">00</label>
-    </div>
-    <h2>Start by pressing one of the cells</h2>
-    <div>
-        <h2>Flags left: <span id="number-of-flag"></span></h2>
-        <button onclick="level(this)">4</button>
-        <button onclick="level(this)">8</button>
-        <button onclick="level(this)">12</button>
-
-    </div>
-    <button id="new-game" onclick="newGame()">😁</button>
-    <div class="board-container"></div>
-
-    <div>
-        <h1 id="modal">Victory!</h1>
-    </div>
+    <body>
 
 
+        <table class="main-layout">
+            <tbody>
+                <tr>
+                    <td class="header" colspan="2">
+                        <button onclick="level(this)">4</button>
+                        <button onclick="level(this)">8</button>
+                        <button onclick="level(this)">12</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="side" colspan="1">
+                        <span>
+                            <div class="timer">
+                                <label id="seconds">0</label>.<label id="miliSeconds">00</label>
+                            </div>
+                            <span>Start by pressing one of the cells</span>
+                        </span>
+                        <span><h2>Flags left: </h2></span>
+                        <span id="number-of-flag"></span>
+                    </td>
+                    <td class="main" colspan="1">
+                        <button id="new-game" onclick="newGame()">😁</button>
+                        <div class="board-container"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="footer" colspan="2">
+                        <h1 id="modal">Victory!</h1>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <script src="js/util.js"></script>
-    <script src="js/main.js"></script>
-</body>
+
+
+
+
+
+
+        <!-- <div class="timer">
+            <label id="seconds">0</label>.<label id="miliSeconds">00</label>
+        </div> -->
+        <!-- <h2>Start by pressing one of the cells</h2> -->
+        <!-- <div> -->
+            <!-- <h2>Flags left: <span id="number-of-flag"></span></h2> -->
+            <!-- <button onclick="level(this)">4</button>
+            <button onclick="level(this)">8</button>
+            <button onclick="level(this)">12</button>
+
+        </div> -->
+        <!-- <button id="new-game" onclick="newGame()">😁</button>
+        <div class="board-container"></div> -->
+
+        <!-- <div>
+            <h1 id="modal">Victory!</h1>
+        </div> --> 
+
+
+
+        <script src="js/gameOver.js"></script>
+        <script src="js/util.js"></script>
+        <script src="js/main.js"></script>
+    </body>
 
 </html>
