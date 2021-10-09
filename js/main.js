@@ -130,7 +130,7 @@ function cellMarked(elCell) {
 
     if (!gBoard[i][j].isShown && !gBoard[i][j].isMarked) {
 
-        if (gLives > 1) {
+        if (gLives > 0) {
             /// update model
             gGame.shownCount++
             gBoard[i][j].isShown = true;
@@ -143,34 +143,25 @@ function cellMarked(elCell) {
                 elCell.innerText = MINE
                 document.querySelector(`.heart${gLives}`).style.display = 'none'
                 gLives--;
-                alert('BOOOOM You got on a mine')
+                if (gLives === 0) {
+                    elCell.innerText = MINE
+                    gameOver()
+                }
+                showModal()
+                if (gGame.isOn) setTimeout(removeModal, 250);
+
+
 
             } else if (!gBoard[i][j].minesAroundCount) {
                 expandShown(elCell, i, j)
             } else {
-                if (numOfMines === 1) {
-                    elCell.style.color = 'rgb(49, 69, 255)' //blue
-                } else if (numOfMines === 2) {
-                    elCell.style.color = 'rgb(108, 173, 54)' //green
-                } else if (numOfMines === 3) {
-                    elCell.style.color = 'rgb(173, 54, 54)' //red
-                } else if (numOfMines === 4) {
-                    elCell.style.color = 'rgb(20, 23, 70)' //dark blue
-                } else {
-                    elCell.style.color = 'rgb(134, 124, 34)'
-                }
-                elCell.innerText = numOfMines;
-                elCell.style.fontWeight = 'bold'
-                elCell.style.fontSize = '120%'
-
+                renderCell(elCell, numOfMines)
             }
 
         } else {
             elCell.innerText = MINE
             gameOver()
         }
-
-
     }
     gGame.isOn = true
     checkVictory();
@@ -286,18 +277,32 @@ function newGame() {
 
 function undo() {
     gBoard = gPreviousBord;
+    renderBoard(gBoard, '.board-container')
     for (var i = 0; i < gLevel.SIZE; i++) {
         for (var j = 0; j < gLevel.SIZE; j++) {
-            if(gBoard[i][j].isShown){
+            if (gBoard[i][j].isShown) {
                 var elCell = document.getElementById(`${i}-${j}`)
-                elCell.style.backgroundColor = 'rgb(204, 231, 225)'
-                console.log(elCell);
+                var numOfMines = gBoard[i][j].minesAroundCount
+                renderCell(elCell, numOfMines);
             }
         }
     }
-    renderBoard(gBoard, '.board-container')
-    console.log(gPreviousBord)
 }
-
-
+function renderCell(elCell, numOfMines) {
+    elCell.innerText = numOfMines;
+    elCell.style.backgroundColor = 'rgb(204, 231, 225)'
+    elCell.style.fontWeight = 'bold'
+    elCell.style.fontSize = '120%'
+    if (numOfMines === 1) {
+        elCell.style.color = 'rgb(49, 69, 255)' //blue
+    } else if (numOfMines === 2) {
+        elCell.style.color = 'rgb(108, 173, 54)' //green
+    } else if (numOfMines === 3) {
+        elCell.style.color = 'rgb(173, 54, 54)' //red
+    } else if (numOfMines === 4) {
+        elCell.style.color = 'rgb(20, 23, 70)' //dark blue
+    } else {
+        elCell.style.color = 'rgb(134, 124, 34)'
+    }
+}
 

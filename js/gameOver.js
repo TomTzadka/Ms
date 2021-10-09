@@ -44,11 +44,16 @@ function showModal() {
     gIsModalOn = true;
     var elModal = document.getElementById('modal');
     elModal.style.display = 'block'
-    if (isVictory) {
-        elModal.innerText = 'You Win!'
+    if (gGame.isOn) {
+        elModal.innerText = 'BOOOM!'
+        elModal.style.color = 'rgb(168, 41, 24)'
     } else {
-        elModal.innerText = 'You Lose!'
-
+        if (isVictory) {
+            elModal.innerText = 'You Win!'
+        } else {
+            elModal.innerText = 'You Lose!'
+        }
+        elModal.style.color = 'rgb(228, 159, 30)'
     }
 }
 function removeModal() {
@@ -72,6 +77,6 @@ function hint(elHint) {
     //update dom
     var elRandomEmptyCell = document.getElementById(`${randomEmptyCell.i}-${randomEmptyCell.j}`)
     elRandomEmptyCell.style.backgroundColor = 'green'
-    elHint.style.display = 'none' 
-  
+    elHint.style.display = 'none'
+
 }
