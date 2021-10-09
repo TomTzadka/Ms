@@ -26,9 +26,7 @@ body{
     margin-left: 10%;
     float: right;
 }
-
 .level button{
-    
     background-color: rgb(231, 176, 114);
     
 }
@@ -60,11 +58,7 @@ button{
     background-color: rgb(202, 186, 186);
     height: 70px;
     width: 90px;
-    cursor: pointer
-    
-    
-
-    
+    cursor: pointer 
 }
 button:hover{
     background-color: rgb(172, 150, 150);
@@ -77,13 +71,17 @@ button:hover{
 }
 #new-game{
     background-color: rgb(252, 181, 181);
+   
     font-size: 25px;
-    /* position: fixed; */
 }
 #new-game:hover{
     background-color: rgb(252, 156, 156);
     font-size: 25px;
     
+}
+.hint{
+    font-size: 30px;
+    cursor: pointer
 }
 #modal{
     color: rgb(228, 159, 30);

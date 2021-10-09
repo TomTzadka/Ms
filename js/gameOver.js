@@ -2,6 +2,7 @@
 // Game ends when all mines are marked, and all the other cells are shown
 var gIsModalOn;
 var gLives = 3;
+var gHint = 3;
 function gameOver() {
     gGame.isOn = false
     clearInterval(gInterval);
@@ -33,9 +34,13 @@ function victory() {
     new Audio('sound/victory.mp4').play();
     showModal()
 }
-function checkVictory(){
-    if (gGame.shownCount === (gLevel.SIZE ** 2) - gGame.markedCount &&
-        gLevel.MINES === 0) victory();
+function checkVictory() {
+    console.log('gLevel.SIZE', gLevel.SIZE);
+    console.log('gGame.shownCount', gGame.shownCount);
+    console.log('gGame.markedCount', gGame.markedCount);
+    if (gGame.shownCount + gGame.markedCount === (gLevel.SIZE ** 2)) victory();
+
+
 }
 
 function showModal() {
@@ -53,4 +58,23 @@ function removeModal() {
     var elModal = document.getElementById('modal');
     elModal.style.display = 'none'
     gIsModalOn = false;
+}
+function hint(elHint) {
+    var emptyCells = [];
+    for (var i = 0; i < gLevel.SIZE; i++) {
+        for (var j = 0; j < gLevel.SIZE; j++) {
+            if (!gBoard[i][j].isMine && !gBoard[i][j].isShown && !gBoard[i][j].isMarked) {
+                var emptyCell = { i: i, j: j }
+                emptyCells.push(emptyCell);
+            }
+        }
+    }
+    var randomEmptyCell = emptyCells[getRandomInt(0, emptyCells.length - 1)]
+    //update modal
+    gHint--
+    //update dom
+    var elRandomEmptyCell = document.getElementById(`${randomEmptyCell.i}-${randomEmptyCell.j}`)
+    elRandomEmptyCell.style.backgroundColor = 'green'
+    elHint.style.display = 'none' 
+  
 }

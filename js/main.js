@@ -59,16 +59,16 @@ function renderBoard(board, selector) {
 function createMines(board, firstClickIdx) {
     var mines = []
     for (var i = 0; i < gLevel.MINES; i++) {
-        var currMine = mines[i]
-        currMine = createMine(board, firstClickIdx)
-
-        for (var j = 0; j < mines.length; j++) { /// fixing double booking of mines  
-            while (currMine === mines[j]) {
-                currMine = createMine(board);
-
-            }
+        var newMine = mines[i]
+        newMine = createMine(board, firstClickIdx)
+        for (var a = 1; a < mines.length; a++) {
+            var oldMine = mines[a]
+            while(newMine.i === oldMine.i && newMine.j === oldMine.j){/// fixing double booking of mines  
+                newMine = createMine(board, firstClickIdx)
+            }   
         }
-        mines.push(currMine)
+
+        mines.push(newMine)
     }
     gLevel.MINES = mines.length
     return mines
@@ -84,21 +84,11 @@ function createMine(board, firstClickIdx) {
         mineI = getRandomInt(0, board.length - 1)
         mineJ = getRandomInt(0, board.length - 1)
     }
-
     mine.i = mineI
     mine.j = mineJ
-
-
-
     if (!gBoard[mine.i][mine.j].isMine) gBoard[mine.i][mine.j].isMine = true;
-
-
-
     return mine;
 }
-
-
-
 // Count mines around each cell and set the cell's minesAroundCount.
 function setMinesNegsCount(elCell) { /// start with board
     var minesCount = 0;
@@ -269,8 +259,16 @@ function newGame() {
     gFirstClick = true
     isVictory = false;
     gLives = 3;
-
+    gHint = 3;
     //update dom
+    for(var i = 0; i < 3; i++){
+        var elLives = document.querySelector(`.hint${i+1}`);
+        elLives.style.display = 'inline-block'
+        console.log('elLives',elLives);
+
+    }
+    //  elLives.style.display = 'block'
+
     var elFace = document.getElementById('new-game')
     elFace.innerText = '😁'
     var elTimerDiv = document.querySelector('.timer');
