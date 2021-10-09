@@ -35,9 +35,6 @@ function victory() {
     showModal()
 }
 function checkVictory() {
-    console.log('gLevel.SIZE', gLevel.SIZE);
-    console.log('gGame.shownCount', gGame.shownCount);
-    console.log('gGame.markedCount', gGame.markedCount);
     if (gGame.shownCount + gGame.markedCount === (gLevel.SIZE ** 2)) victory();
 
 

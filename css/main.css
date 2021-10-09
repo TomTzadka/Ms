@@ -26,10 +26,7 @@ body{
     margin-left: 10%;
     float: right;
 }
-.level button{
-    background-color: rgb(231, 176, 114);
-    
-}
+
 .main{
     background-color: rgb(190, 211, 229);
     padding: 10px;
@@ -50,38 +47,41 @@ td{
 
 }
 td:hover{
-    background-color: rgb(172, 150, 150);
-
+    background-color: rgb(231, 176, 112);
 }
 
 button{
-    background-color: rgb(202, 186, 186);
-    height: 70px;
+    background-color: rgb(231, 176, 112);
+    height: 10vh;
     width: 90px;
-    cursor: pointer 
+    cursor: pointer;
+    border-radius: 15%;
+    
 }
 button:hover{
-    background-color: rgb(172, 150, 150);
+    background-color: rgb(216, 151, 77);
     
 }
 .timer{
     font-size: 50px;
     margin-top: 10px;
-    float: left;
+    /* float: left; */
 }
 #new-game{
     background-color: rgb(252, 181, 181);
-   
     font-size: 25px;
 }
 #new-game:hover{
     background-color: rgb(252, 156, 156);
-    font-size: 25px;
     
 }
 .hint{
     font-size: 30px;
     cursor: pointer
+    
+}
+div .hint{
+    float: left;
 }
 #modal{
     color: rgb(228, 159, 30);

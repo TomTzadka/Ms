@@ -1,6 +1,7 @@
 'use strict'
 
 var gBoard
+var gPreviousBord;
 var gLevel = { SIZE: 4, MINES: 2 };
 var gGame = {
     isOn: false,
@@ -63,9 +64,9 @@ function createMines(board, firstClickIdx) {
         newMine = createMine(board, firstClickIdx)
         for (var a = 1; a < mines.length; a++) {
             var oldMine = mines[a]
-            while(newMine.i === oldMine.i && newMine.j === oldMine.j){/// fixing double booking of mines  
+            while (newMine.i === oldMine.i && newMine.j === oldMine.j) {/// fixing double booking of mines  
                 newMine = createMine(board, firstClickIdx)
-            }   
+            }
         }
 
         mines.push(newMine)
@@ -112,10 +113,17 @@ function setMinesNegsCount(elCell) { /// start with board
 
 // Called when a cell (td) is clicked
 function cellClicked(elCell) {
-    if (gGame.isOn) cellMarked(elCell);
+
+    if (gGame.isOn) {
+
+        cellMarked(elCell);
+
+    }
 }
 // Called on right click to mark a cell (suspected to be a mine) Search the web (and implement) how to hide the context menu on right click
 function cellMarked(elCell) {
+    gPreviousBord = gBoard.slice(0, gBoard.length);
+
     var cellIdx = getCallCoords(elCell.id);
     var i = cellIdx.i
     var j = cellIdx.j
@@ -133,9 +141,7 @@ function cellMarked(elCell) {
             elCell.style.backgroundColor = 'rgb(204, 231, 225)'
             if (gBoard[i][j].isMine) {
                 elCell.innerText = MINE
-                // gameOver()
                 document.querySelector(`.heart${gLives}`).style.display = 'none'
-                // console.log('elHeart',elHeart);
                 gLives--;
                 alert('BOOOOM You got on a mine')
 
@@ -261,14 +267,10 @@ function newGame() {
     gLives = 3;
     gHint = 3;
     //update dom
-    for(var i = 0; i < 3; i++){
-        var elLives = document.querySelector(`.hint${i+1}`);
+    for (var i = 0; i < 3; i++) {
+        var elLives = document.querySelector(`.hint${i + 1}`);
         elLives.style.display = 'inline-block'
-        console.log('elLives',elLives);
-
     }
-    //  elLives.style.display = 'block'
-
     var elFace = document.getElementById('new-game')
     elFace.innerText = '😁'
     var elTimerDiv = document.querySelector('.timer');
@@ -282,7 +284,20 @@ function newGame() {
 
 
 
-
+function undo() {
+    gBoard = gPreviousBord;
+    for (var i = 0; i < gLevel.SIZE; i++) {
+        for (var j = 0; j < gLevel.SIZE; j++) {
+            if(gBoard[i][j].isShown){
+                var elCell = document.getElementById(`${i}-${j}`)
+                elCell.style.backgroundColor = 'rgb(204, 231, 225)'
+                console.log(elCell);
+            }
+        }
+    }
+    renderBoard(gBoard, '.board-container')
+    console.log(gPreviousBord)
+}
 
 
 
